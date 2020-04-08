@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--http://satbeams.com-->
 <satellites>
   <sat name="NSS 9 (177W) C" flags="1" position="-1770">
     <transponder frequency="3763000" symbol_rate="27500000" polarization="1" fec_inner="3" system="0" modulation="1"/>
