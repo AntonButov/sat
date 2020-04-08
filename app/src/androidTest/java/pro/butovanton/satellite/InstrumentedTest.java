@@ -11,20 +11,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.not;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-
-import static org.junit.Assert.*;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -47,20 +40,19 @@ public class InstrumentedTest {
     public ActivityTestRule activityRule = new ActivityTestRule<>(
             MainActivity.class);
 
-    private Parser parser = new Parser(activityRule.getActivity());
-    private List<sat> sats;
-
+    private Parser parser;
+    private List<Sat> sats;
 
     @Test
     public void parse_sats() throws IOException, XmlPullParserException {
+    parser = new Parser(activityRule.getActivity());
     sats = parser.parse();
-
+    assertTrue(sats.size() > 0);
+    for( Sat sat : sats)
+        assertTrue(sat.getName() != null);
     }
 
-    XmlPullParserException xmlPullParserException () {
 
-        return null;
-    }
 }
 
 

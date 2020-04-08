@@ -30,14 +30,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        Parser parser = new Parser(this);
-        try {
-            parser.parse();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       // Parser parser = new Parser(this);
+   //     try {
+     //       parser.parse();
+    //    } catch (XmlPullParserException e) {
+    //        e.printStackTrace();
+   //     } catch (IOException e) {
+ //           e.printStackTrace();
+ //       }
     }
 
 }
