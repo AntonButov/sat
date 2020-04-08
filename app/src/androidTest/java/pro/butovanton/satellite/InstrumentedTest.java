@@ -4,7 +4,9 @@ import android.content.Context;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.xmlpull.v1.XmlPullParserException;
@@ -13,6 +15,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.not;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 
 import static org.junit.Assert.*;
 
@@ -28,23 +38,23 @@ public class InstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("pro.butovanton.atellite", appContext.getPackageName());
+        assertEquals("pro.butovanton.satellite", appContext.getPackageName());
     }
 
     Context context = InstrumentationRegistry.getInstrumentation().getContext();
 
-    private Parser parser = new Parser(context);
+    @Rule
+    public ActivityTestRule activityRule = new ActivityTestRule<>(
+            MainActivity.class);
+
+    private Parser parser = new Parser(activityRule.getActivity());
     private List<sat> sats;
 
+
     @Test
-    public void parse_sats() {
-        try {
-            sats =  parser.parse();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void parse_sats() throws IOException, XmlPullParserException {
+    sats = parser.parse();
+
     }
 
     XmlPullParserException xmlPullParserException () {

@@ -3,26 +3,13 @@ package pro.butovanton.satellite;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.XmlResourceParser;
-import android.net.Uri;
-import android.os.Environment;
-import android.util.Xml;
 
-import androidx.annotation.XmlRes;
-
-import org.xml.sax.XMLReader;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.InflaterInputStream;
 
 public class Parser {
     private Context context;
@@ -35,29 +22,12 @@ public class Parser {
     @SuppressLint("ResourceType")
     public List parse() throws XmlPullParserException, IOException {
 
-        File file = new File(context.getFilesDir()+ "/satellites.xml");
-        FileInputStream fis = new FileInputStream(file);
-        InputStream in = new FileInputStream(file);
+        XmlResourceParser xmlResourceParser = context.getResources().getXml(R.xml.satellites);
 
-      //  StringReader stringReader = new StringReader(context.getResources().getXml(R.xml.satellites));
+        xmlResourceParser.next();
+        xmlResourceParser.nextTag();
 
-    //    Uri uri = Uri.parse("android.resource://"+context.getPackageName()+"/" + "R.xml.satellites");
-     //   InputStream inputStream = new FileInputStream( new File(uri.toString()));
-        XmlResourceParser xpp=context.getResources().getXml(R.xml.satellites);
-        int eventType = xpp.getEventType();
-        eventType = xpp.next();
-        eventType = xpp.nextTag();
-
-        try {
-            String string =  context.getPackageResourcePath();
-            XmlPullParser parser = Xml.newPullParser();
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(in, null);
-            parser.nextTag();
-            return readFeed(xpp);
-        } finally {
-            in.close();
-        }
+        return readFeed(xmlResourceParser);
     }
 
     private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
@@ -70,7 +40,7 @@ public class Parser {
             }
             String name = parser.getName();
             // Starts by looking for the entry tag
-            if (name.equals("entry")) {
+            if (name.equals("sat")) {
                 entries.add(readEntry(parser));
             } else {
                 skip(parser);
@@ -94,7 +64,7 @@ public class Parser {
     // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
 // to their respective "read" methods for processing. Otherwise, skips the tag.
     private Entry readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
-        parser.require(XmlPullParser.START_TAG, ns, "entry");
+        parser.require(XmlPullParser.START_TAG, ns, "sat name");
         String title = null;
         String summary = null;
         String link = null;
