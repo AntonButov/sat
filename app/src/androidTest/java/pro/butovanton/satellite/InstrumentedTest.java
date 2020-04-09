@@ -53,6 +53,12 @@ public class InstrumentedTest {
         assertTrue(sat.getName() != null);
     }
 
+    @Test
+    public void get_position() {
+
+    int position = sats.get(0).getPosition();
+
+    }
 
 }
 

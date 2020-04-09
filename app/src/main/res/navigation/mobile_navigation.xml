@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="pro.butovanton.satellite.ui.camera.DashboardFragment"
+        android:name="pro.butovanton.satellite.ui.camera.CameraFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_camera" >
         <action

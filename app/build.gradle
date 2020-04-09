@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "pro.butovanton.satellite"
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"

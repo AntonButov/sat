@@ -37,4 +37,8 @@ public class satsViewModel extends ViewModel {
         }
         return sats;
     }
+
+    public List<Sat> getSatsList() {
+        return sats.getValue();
+    }
 }
