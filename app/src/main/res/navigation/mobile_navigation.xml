@@ -25,9 +25,4 @@
             app:destination="@id/navigation_home" />
     </fragment>
 
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="pro.butovanton.satellite.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
 </navigation>
