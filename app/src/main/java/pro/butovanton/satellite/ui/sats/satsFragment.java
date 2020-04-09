@@ -10,10 +10,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import pro.butovanton.satellite.R;
+import pro.butovanton.satellite.Sat;
 
 public class satsFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private sRecyclerAdapter adapter;
 
     private satsViewModel satsViewModel;
 
@@ -22,11 +31,15 @@ public class satsFragment extends Fragment {
         satsViewModel =
                 ViewModelProviders.of(requireActivity()).get(satsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_sats, container, false);
-     //   final TextView textView = root.findViewById(R.id.text_home);
-        satsViewModel.getSats().observe(getViewLifecycleOwner(), new Observer<String>() {
+        recyclerView = root.findViewById(R.id.reciclerView);
+        final sRecyclerAdapter adapter = new sRecyclerAdapter(getActivity(),  new ArrayList<Sat>());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setHasFixedSize(true);
+        satsViewModel.getSats(getActivity()).observe(getViewLifecycleOwner(), new Observer<List<Sat>>() {
             @Override
-            public void onChanged(@Nullable String s) {
-           //     textView.setText(s);
+            public void onChanged(@Nullable List<Sat> sats) {
+                adapter.setSats(sats);
             }
         });
         return root;

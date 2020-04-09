@@ -35,6 +35,10 @@ class sRecyclerAdapter extends RecyclerView.Adapter<sRecyclerAdapter.sViewHolder
     @Override
     public void onBindViewHolder(sViewHolder holder, int position) {
         holder.setName(sats.get(position).getName());
+        String providers = sats.get(position).getProviders().toString();
+        providers = providers.replace("[", "");
+        providers = providers.replace("]", "");
+        holder.setProvidersT(providers);
     }
 
     @Override
@@ -42,18 +46,26 @@ class sRecyclerAdapter extends RecyclerView.Adapter<sRecyclerAdapter.sViewHolder
         return sats.size();
     }
 
+    void setSats(List<Sat> sats) {
+        this.sats = sats;
+        notifyDataSetChanged();
+    }
+
 
     public class sViewHolder extends RecyclerView.ViewHolder {
-        private final TextView nameT;
+        private final TextView nameT, providersT;
 
         public sViewHolder(View view) {
             super(view);
             nameT = (TextView) view.findViewById(R.id.name);
+            providersT = view.findViewById(R.id.textProviders);
         }
 
         public void setName(String name) {
             nameT.setText(name);
         }
+
+        public void setProvidersT(String providers) { providersT.setText( providers);}
 
      }
 
