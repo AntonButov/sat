@@ -7,15 +7,15 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="pro.butovanton.satellite.ui.home.HomeFragment"
+        android:name="pro.butovanton.satellite.ui.sats.satsFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_sats" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="pro.butovanton.satellite.ui.dashboard.DashboardFragment"
+        android:name="pro.butovanton.satellite.ui.camera.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_camera" />
 
     <fragment
         android:id="@+id/navigation_notifications"

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -15,6 +16,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
+
+    public MainActivity() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +35,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-       // Parser parser = new Parser(this);
-   //     try {
-     //       parser.parse();
-    //    } catch (XmlPullParserException e) {
-    //        e.printStackTrace();
-   //     } catch (IOException e) {
- //           e.printStackTrace();
- //       }
     }
 
 }

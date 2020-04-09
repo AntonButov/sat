@@ -21,7 +21,7 @@ import java.util.Set;
 public class Parser {
     private Context context;
 
-    Parser(Context context) {
+    public Parser(Context context) {
         this.context = context;
     }
 
