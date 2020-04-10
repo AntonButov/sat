@@ -130,8 +130,9 @@ public class CameraFragment extends Fragment implements SensorEventListener {
                 Log.i("DEBUG", "cameraID: " + cameraID);
                 id = Integer.parseInt(cameraID);
                 // создаем обработчик для камеры
-                myCameras[id] = new CameraService(mCameraManager, cameraID, mTextureView);
             }
+            myCameras[CAMERA1] = new CameraService(mCameraManager, "0", mTextureView);
+
         } catch (CameraAccessException e) {
             Log.e("DEBUG", e.getMessage());
             e.printStackTrace();
@@ -162,8 +163,6 @@ public class CameraFragment extends Fragment implements SensorEventListener {
     @Override
     public void onResume() {
         super.onResume();
-        //     azimutsat.setText("Азимут спутника: "+azimuthsatint);
-        //     conersat.setText("Угол места спутника: "+ conerplacesat);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_REQUEST_CODE_FOR_CAMERA);
@@ -330,7 +329,7 @@ public class CameraFragment extends Fragment implements SensorEventListener {
     public void onPause() {
         super.onPause();
         if(myCameras[CAMERA1].isOpen()){myCameras[CAMERA1].closeCamera();}
-        if(myCameras[CAMERA2].isOpen()){myCameras[CAMERA2].closeCamera();}
+      //  if(myCameras[CAMERA2].isOpen()){myCameras[CAMERA2].closeCamera();}
         sensorManager.unregisterListener(this);
     }
 
