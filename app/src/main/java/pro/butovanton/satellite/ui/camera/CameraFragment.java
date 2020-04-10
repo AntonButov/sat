@@ -114,9 +114,9 @@ public class CameraFragment extends Fragment implements SensorEventListener{
 
         azimut = root.findViewById(R.id.textViewAsimut);
         corner = root.findViewById(R.id.textViewConerPl);
-        mTextureView = root.findViewById(R.id.textureView);
+        mTextureView = root.findViewById(R.id.texture);
         imageLineGor = root.findViewById(R.id.imageViewGor);
-        left = root.findViewById(R.id.left);
+    //    left = root.findViewById(R.id.left);
         //  name = root.findViewById(R.id.name);
 
         mCameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
@@ -142,10 +142,12 @@ public class CameraFragment extends Fragment implements SensorEventListener{
 
         ConstraintLayout constraintLayout = root.findViewById(R.id.constrait);
         viewsats = new ArrayList<viewsat>();
-        for (Sat sat : sats) {
-            float azimutplacesat = azimuthsat(35, 49, sat.getPosition());
-            float conerplacesat = conerplacesat(35, 49, sat.getPosition());
-            String name = sat.getName();
+
+        for(int i = 0 ; i< 30; i ++) {
+     //   for (Sat sat : sats) {
+            float azimutplacesat = azimuthsat(35, 49, sats.get(i).getPosition());
+            float conerplacesat = conerplacesat(35, 49, sats.get(i).getPosition());
+            String name = sats.get(i).getName();
             if (conerplacesat > 0)
                 viewsats.add(new viewsat(getContext(), constraintLayout, azimutplacesat, conerplacesat, name));
         }
@@ -310,7 +312,7 @@ public class CameraFragment extends Fragment implements SensorEventListener{
                     animatArrow.setDuration(5000);
 //                    left.startAnimation(animatArrow);
 
-                      Log.d("DEBUG", "azimut="+(int)azimuthcon+" xos= "+(int)xos+" coner= "+(int)conerplace);
+                  //    Log.d("DEBUG", "azimut="+(int)azimuthcon+" xos= "+(int)xos+" coner= "+(int)conerplace);
                 }
                 ///------------------------------------------------------------------------------------
             }
@@ -365,6 +367,7 @@ public class CameraFragment extends Fragment implements SensorEventListener{
         private String mCameraID;
         private CameraDevice mCameraDevice = null;
         private CameraCaptureSession mCaptureSession;
+
         public CameraService(CameraManager cameraManager, String cameraID) {
             mCameraManager = cameraManager;
             mCameraID = cameraID;
