@@ -57,12 +57,13 @@ import static java.lang.Math.tan;
 import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
 
-public class CameraFragment extends Fragment implements SensorEventListener{
+public class CameraFragment extends Fragment implements SensorEventListener {
 
     private pro.butovanton.satellite.ui.sats.satsViewModel satsViewModel;
 
     private final int MY_REQUEST_CODE_FOR_CAMERA = 110;
     CameraService[] myCameras = null;
+    int id;
 
     private CameraManager mCameraManager = null;
     private final int CAMERA1 = 0;
@@ -125,7 +126,7 @@ public class CameraFragment extends Fragment implements SensorEventListener{
             myCameras = new CameraService[mCameraManager.getCameraIdList().length];
             for (String cameraID : mCameraManager.getCameraIdList()) {
                 Log.i("DEBUG", "cameraID: " + cameraID);
-                int id = Integer.parseInt(cameraID);
+                id = Integer.parseInt(cameraID);
                 // создаем обработчик для камеры
                 myCameras[id] = new CameraService(mCameraManager, cameraID);
             }
@@ -363,7 +364,7 @@ public class CameraFragment extends Fragment implements SensorEventListener{
         Log.d("DEBUG","accuracy " + accuracy);
     }
 
-    public class CameraService {
+    public class CameraService  {
         private String mCameraID;
         private CameraDevice mCameraDevice = null;
         private CameraCaptureSession mCaptureSession;
@@ -395,7 +396,31 @@ public class CameraFragment extends Fragment implements SensorEventListener{
         };
 
         private void createCameraPreviewSession() {
-            mTextureView.setSurfaceTextureListener(surfaceTextureListener);
+            if (mTextureView.isAvailable()) {
+            Surface surface = new Surface(mTextureView.getSurfaceTexture());
+            try {
+                final CaptureRequest.Builder builder =
+                        mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+                builder.addTarget(surface);
+                mCameraDevice.createCaptureSession(Arrays.asList(surface),
+                        new CameraCaptureSession.StateCallback() {
+                            @Override
+                            public void onConfigured(CameraCaptureSession session) {
+                                mCaptureSession = session;
+                                try {
+                                    mCaptureSession.setRepeatingRequest(builder.build(),null,null);
+                                } catch (CameraAccessException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onConfigureFailed(CameraCaptureSession session) { }}, null );
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
         }
 
         TextureView.SurfaceTextureListener surfaceTextureListener = new TextureView.SurfaceTextureListener() {
