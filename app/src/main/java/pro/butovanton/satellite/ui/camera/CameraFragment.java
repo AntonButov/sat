@@ -43,6 +43,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import pro.butovanton.satellite.Azimuth;
+import pro.butovanton.satellite.CameraService;
 import pro.butovanton.satellite.R;
 import pro.butovanton.satellite.Sat;
 import pro.butovanton.satellite.ui.sats.satsViewModel;
@@ -128,7 +130,7 @@ public class CameraFragment extends Fragment implements SensorEventListener {
                 Log.i("DEBUG", "cameraID: " + cameraID);
                 id = Integer.parseInt(cameraID);
                 // создаем обработчик для камеры
-                myCameras[id] = new CameraService(mCameraManager, cameraID);
+                myCameras[id] = new CameraService(mCameraManager, cameraID, mTextureView);
             }
         } catch (CameraAccessException e) {
             Log.e("DEBUG", e.getMessage());
@@ -146,27 +148,13 @@ public class CameraFragment extends Fragment implements SensorEventListener {
 
         for(int i = 0 ; i< 30; i ++) {
      //   for (Sat sat : sats) {
-            float azimutplacesat = azimuthsat(35, 49, sats.get(i).getPosition());
-            float conerplacesat = conerplacesat(35, 49, sats.get(i).getPosition());
+            float azimutplacesat = Azimuth.azimuthsat(35, 49, sats.get(i).getPosition());
+            float conerplacesat = Azimuth.conerplacesat(35, 49, sats.get(i).getPosition());
             String name = sats.get(i).getName();
             if (conerplacesat > 0)
                 viewsats.add(new viewsat(getContext(), constraintLayout, azimutplacesat, conerplacesat, name));
         }
         int i = 0;
-
-  //      for (viewsat viewsat : viewsats) { // считаем средний азмут и уголместа
- //           azimuthsatint = (int) (azimuthsatint + viewsat.getAzimut());
- //           conerplacesat = (int) (conerplacesat + viewsat.getConerplace());
-  //          if (i % 2 == 0) viewsat.setside(true);
- //           else viewsat.setside(false);
- //           i++;
- //       }
-
-        azimuthsatint = azimuthsatint / (viewsats.size() + 1);
-        conerplacesat = conerplacesat / (viewsats.size() + 1);
-
-        azimuthsatint = 0;
-        conerplacesat = 0;
 
         return root;
     }
@@ -202,7 +190,7 @@ public class CameraFragment extends Fragment implements SensorEventListener {
     }
 
     private void openCamera() {
-        myCameras[CAMERA1].openCamera();
+        myCameras[CAMERA1].openCamera(getActivity());
     }
 
     @Override
@@ -333,175 +321,12 @@ public class CameraFragment extends Fragment implements SensorEventListener {
         return (Math.PI*coner)/180;
     }
 
-    //где g1 - долгота спутника, g2 - долгота места приема, v - широта места приема.
-    private float conerplacesat(float longitudesat, float longitudeplace, float conersat) {
-        //    g1 = 36;
-        //     g2 = 37;
-        //     v =56;
-        float g2 = longitudesat;
-        float v = longitudeplace;
-        float g1 = conersat;
-        g2 = (float) toRadians(g2);
-        g1 = (float) toRadians(g1);
-        v = (float) toRadians(v);
-        float c1= (float) (cos(g2-g1)*cos(v)-0.151);
-        float c2 = (float)(1-(cos(g2-g1)*cos(g2-g1)*cos(v)*cos(v)));
-        return (float) toDegrees(Math.atan(c1/sqrt(c2)));
-    }
-
-    private float azimuthsat(float longitudesat, float longitudeplace, float conersat) {
-        float g2 = longitudesat;
-        float v = longitudeplace;
-        float g1 = conersat;
-        g2 = (float) toRadians(g2);
-        g1 = (float) toRadians(g1);
-        v = (float) toRadians(v);
-        return (float) (180 + toDegrees(atan(tan(g2-g1)/sin(v))));
-    }
-
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         Log.d("DEBUG","accuracy " + accuracy);
     }
 
-    public class CameraService  {
-        private String mCameraID;
-        private CameraDevice mCameraDevice = null;
-        private CameraCaptureSession mCaptureSession;
-
-        public CameraService(CameraManager cameraManager, String cameraID) {
-            mCameraManager = cameraManager;
-            mCameraID = cameraID;
-        }
-
-        private CameraDevice.StateCallback mCameraCallback = new CameraDevice.StateCallback() {
-            @Override
-            public void onOpened(CameraDevice camera) {
-                mCameraDevice = camera;
-                Log.i("DEBUG", "Open camera  with id:"+mCameraDevice.getId());
-                createCameraPreviewSession();
-            }
-
-            @Override
-            public void onDisconnected(CameraDevice camera) {
-                mCameraDevice.close();
-                Log.i("DEBUG", "disconnect camera  with id:"+mCameraDevice.getId());
-                mCameraDevice = null;
-            }
-
-            @Override
-            public void onError(CameraDevice camera, int error) {
-                Log.i("DEBUG", "error! camera id:"+camera.getId()+" error:"+error);
-            }
-        };
-
-        private void createCameraPreviewSession() {
-            if (mTextureView.isAvailable()) {
-            Surface surface = new Surface(mTextureView.getSurfaceTexture());
-            try {
-                final CaptureRequest.Builder builder =
-                        mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-                builder.addTarget(surface);
-                mCameraDevice.createCaptureSession(Arrays.asList(surface),
-                        new CameraCaptureSession.StateCallback() {
-                            @Override
-                            public void onConfigured(CameraCaptureSession session) {
-                                mCaptureSession = session;
-                                try {
-                                    mCaptureSession.setRepeatingRequest(builder.build(),null,null);
-                                } catch (CameraAccessException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void onConfigureFailed(CameraCaptureSession session) { }}, null );
-            } catch (CameraAccessException e) {
-                e.printStackTrace();
-            }
-        }
-
-        }
-
-        TextureView.SurfaceTextureListener surfaceTextureListener = new TextureView.SurfaceTextureListener() {
-
-            @Override
-            public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
-                //              SurfaceTexture texture = mTextureView.getSurfaceTexture();
-                //               texture.setDefaultBufferSize(720,480);
-                //              Surface surface = new Surface(texture);
-                Surface surface = new Surface(surfaceTexture);
-                try {
-                    final CaptureRequest.Builder builder =
-                            mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-                    builder.addTarget(surface);
-                    mCameraDevice.createCaptureSession(Arrays.asList(surface),
-                            new CameraCaptureSession.StateCallback() {
-                                @Override
-                                public void onConfigured(CameraCaptureSession session) {
-                                    mCaptureSession = session;
-                                    try {
-                                        mCaptureSession.setRepeatingRequest(builder.build(),null,null);
-                                    } catch (CameraAccessException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                                @Override
-                                public void onConfigureFailed(CameraCaptureSession session) { }}, null );
-                } catch (CameraAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-
-            }
-
-            @Override
-            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-                return false;
-            }
-
-            @Override
-            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
-            }
-        };
-
-        public boolean isOpen() {
-            if (mCameraDevice == null) {
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        public void openCamera() {
-            try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                        mCameraManager.openCamera(mCameraID,mCameraCallback,null);
-                    }
-                }
-
-            } catch (CameraAccessException e) {
-                Log.i("LOG_TAG",e.getMessage());
-            }
-        }
-
-        public void closeCamera() {
-
-            if (mCameraDevice != null) {
-                mCameraDevice.close();
-                mCameraDevice = null;
-            }
-        }
-
-    }
-
-    @Override
+   @Override
     public void onPause() {
         super.onPause();
         if(myCameras[CAMERA1].isOpen()){myCameras[CAMERA1].closeCamera();}
