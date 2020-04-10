@@ -119,8 +119,6 @@ public class CameraFragment extends Fragment implements SensorEventListener {
         corner = root.findViewById(R.id.textViewConerPl);
         mTextureView = root.findViewById(R.id.texture);
         imageLineGor = root.findViewById(R.id.imageViewGor);
-    //    left = root.findViewById(R.id.left);
-        //  name = root.findViewById(R.id.name);
 
         mCameraManager = (CameraManager) getActivity().getSystemService(Context.CAMERA_SERVICE);
         try {
@@ -151,7 +149,7 @@ public class CameraFragment extends Fragment implements SensorEventListener {
      //   for (Sat sat : sats) {
             float azimutplacesat = Azimuth.azimuthsat(35, 49, sats.get(i).getPosition());
             float conerplacesat = Azimuth.conerplacesat(35, 49, sats.get(i).getPosition());
-            String name = sats.get(i).getName();
+            String name = Integer.toString(sats.get(i).getPosition());
             if (conerplacesat > 0)
                 viewsats.add(new viewsat(getContext(), constraintLayout, azimutplacesat, conerplacesat, name));
         }
@@ -329,7 +327,6 @@ public class CameraFragment extends Fragment implements SensorEventListener {
     public void onPause() {
         super.onPause();
         if(myCameras[CAMERA1].isOpen()){myCameras[CAMERA1].closeCamera();}
-      //  if(myCameras[CAMERA2].isOpen()){myCameras[CAMERA2].closeCamera();}
         sensorManager.unregisterListener(this);
     }
 

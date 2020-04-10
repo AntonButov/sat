@@ -50,10 +50,7 @@ public class Sat {
     }
 
 
-
-
-
     public int getPosition() {
-        return 0;
+        return position;
     }
 }
