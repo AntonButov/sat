@@ -144,16 +144,17 @@ public class CameraFragment extends Fragment implements SensorEventListener {
 
         ConstraintLayout constraintLayout = root.findViewById(R.id.constrait);
         viewsats = new ArrayList<viewsat>();
-
-        for(int i = 0 ; i< 30; i ++) {
+        List<Integer> positions = new ArrayList<>();
+        for(Sat sat : sats) {
      //   for (Sat sat : sats) {
-            float azimutplacesat = Azimuth.azimuthsat(35, 49, sats.get(i).getPosition());
-            float conerplacesat = Azimuth.conerplacesat(35, 49, sats.get(i).getPosition());
-            String name = Integer.toString(sats.get(i).getPosition());
-            if (conerplacesat > 0)
+            float azimutplacesat = Azimuth.azimuthsat(35, 49, sat.getPosition());
+            float conerplacesat = Azimuth.conerplacesat(35, 49, sat.getPosition());
+            String name = Integer.toString(sat.getPosition()) + "°";
+            if (conerplacesat > 0 && !positions.contains(sat.getPosition()) && sat.getPosition()%3 == 0) {
+                positions.add(sat.getPosition());
                 viewsats.add(new viewsat(getContext(), constraintLayout, azimutplacesat, conerplacesat, name));
+            }
         }
-        int i = 0;
 
         return root;
     }
@@ -181,7 +182,7 @@ public class CameraFragment extends Fragment implements SensorEventListener {
             } else {
                 Toast toast = Toast.makeText(getActivity().getApplicationContext(), "no permition camera", Toast.LENGTH_SHORT);
                 toast.show();
-                NavHostFragment.findNavController(this).navigate(R.id.action_navigation_dashboard_to_navigation_home);
+                NavHostFragment.findNavController(this).navigate(R.id.action_navigation_camera_to_navigation_sats);
             }
         }
     }
@@ -294,8 +295,8 @@ public class CameraFragment extends Fragment implements SensorEventListener {
                     float dyy = y1 - height;
                     float dalpha = (float) toDegrees(atan(dyy/dxx));
                     if (x1 - width/2 < 0) dalpha = dalpha - 180;
-                    Animation animatArrow = new RotateAnimation(dalpha, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,0.5f);
-                    animatArrow.setDuration(5000);
+           //         Animation animatArrow = new RotateAnimation(dalpha, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,0.5f);
+            //        animatArrow.setDuration(5000);
 //                    left.startAnimation(animatArrow);
 
                   //    Log.d("DEBUG", "azimut="+(int)azimuthcon+" xos= "+(int)xos+" coner= "+(int)conerplace);
