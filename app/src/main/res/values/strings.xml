@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">pro.butovanton.satellite</string>
+    <string name="app_name">Satellites</string>
     <string name="title_home">Satellites</string>
     <string name="title_dashboard">Camera</string>
     <string name="title_notifications">Notifications</string>
