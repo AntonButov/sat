@@ -1,5 +1,7 @@
 package pro.butovanton.satellite;
 
+import android.location.Location;
+
 import static java.lang.Math.atan;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -26,9 +28,9 @@ import static java.lang.Math.toRadians;
         return (float) toDegrees(Math.atan(c1/sqrt(c2)));
     }
 
-    public static float azimuthsat(float longitudesat, float longitudeplace, float conersat) {
-        float g2 = longitudesat;
-        float v = longitudeplace;
+    public static float azimuthsat(Location location, float conersat) {
+        float g2 = (float) location.getLongitude();
+        float v = (float) location.getLatitude();
         float g1 = conersat;
         g2 = (float) toRadians(g2);
         g1 = (float) toRadians(g1);

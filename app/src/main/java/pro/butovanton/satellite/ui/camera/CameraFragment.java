@@ -137,7 +137,7 @@ public class CameraFragment extends Fragment implements SensorEventListener {
         Location location = satsViewModel.getLocation();
         for(Sat sat : sats) {
      //   for (Sat sat : sats) {
-            float azimutplacesat = Azimuth.azimuthsat((float) location.getLongitude(), (float) location.getLatitude(), sat.getPosition());
+            float azimutplacesat = Azimuth.azimuthsat(location, sat.getPosition());
             float conerplacesat = Azimuth.conerplacesat((float) location.getLongitude(), (float) location.getLatitude(), sat.getPosition());
             String name = Integer.toString(abs(sat.getPosition()));
             if (sat.getPosition() > 0) name = name + "E°";

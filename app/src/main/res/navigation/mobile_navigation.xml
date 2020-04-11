@@ -14,7 +14,7 @@
             android:id="@+id/action_navigation_sats_to_navigation_camera"
             app:destination="@id/navigation_camera" />
         <action
-            android:id="@+id/action_navigation_sats_to_notificationsFragment"
+            android:id="@+id/action_navigation_sats_to_detail"
             app:destination="@id/notificationsDetail" />
     </fragment>
 
@@ -29,9 +29,9 @@
     </fragment>
     <fragment
         android:id="@+id/notificationsDetail"
-        android:name="pro.butovanton.satellite.ui.detail.NotificationsFragment"
+        android:name="pro.butovanton.satellite.ui.detail.DatailSatellite"
         android:label="fragment_notifications"
-        tools:layout="@layout/fragment_notifications" >
+        tools:layout="@layout/fragment_detail" >
         <action
             android:id="@+id/action_Deatil_to_navigation_sats"
             app:destination="@id/navigation_sats" />

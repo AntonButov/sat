@@ -1,10 +1,10 @@
 package pro.butovanton.satellite.ui.sats;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import pro.butovanton.satellite.Azimuth;
 import pro.butovanton.satellite.R;
 import pro.butovanton.satellite.Sat;
 
@@ -50,6 +51,17 @@ public class satsFragment extends Fragment implements ItemClickListener {
 
     @Override
     public void onItemClick(Sat sat) {
+        Location location = satsViewModel.getLocation();
+        int azimutplacesat = (int) Azimuth.azimuthsat(location, sat.getPosition());
+        int conerplacesat = (int) Azimuth.conerplacesat((float) location.getLongitude(), (float) location.getLatitude(), sat.getPosition());
+        String diametr = Azimuth.getdiametr(conerplacesat);
+        Bundle bundle = new Bundle();
+        bundle.putString("name", sat.getName());
+        bundle.putInt("azimut", (int) azimutplacesat);
+        bundle.putInt("coner", (int) conerplacesat);
+        bundle.putString("diametr", diametr + "см.");
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.action_navigation_sats_to_detail, bundle);
 
     }
 }
