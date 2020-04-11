@@ -15,6 +15,7 @@ import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -64,6 +65,7 @@ public class CameraFragment extends Fragment implements SensorEventListener {
     private pro.butovanton.satellite.ui.sats.satsViewModel satsViewModel;
 
     private final int MY_REQUEST_CODE_FOR_CAMERA = 110;
+    private final int MY_REQUEST_LOCATION = 111;
     CameraService[] myCameras = null;
     int id;
 
@@ -145,10 +147,11 @@ public class CameraFragment extends Fragment implements SensorEventListener {
         ConstraintLayout constraintLayout = root.findViewById(R.id.constrait);
         viewsats = new ArrayList<viewsat>();
         List<Integer> positions = new ArrayList<>();
+        Location location = satsViewModel.getLocation();
         for(Sat sat : sats) {
      //   for (Sat sat : sats) {
-            float azimutplacesat = Azimuth.azimuthsat(35, 49, sat.getPosition());
-            float conerplacesat = Azimuth.conerplacesat(35, 49, sat.getPosition());
+            float azimutplacesat = Azimuth.azimuthsat((float) location.getLongitude(), (float) location.getLatitude(), sat.getPosition());
+            float conerplacesat = Azimuth.conerplacesat((float) location.getLongitude(), (float) location.getLatitude(), sat.getPosition());
             String name = Integer.toString(sat.getPosition()) + "°";
             if (conerplacesat > 0 && !positions.contains(sat.getPosition()) && sat.getPosition()%3 == 0) {
                 positions.add(sat.getPosition());
@@ -166,6 +169,11 @@ public class CameraFragment extends Fragment implements SensorEventListener {
             if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_REQUEST_CODE_FOR_CAMERA);
             }
+                if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_REQUEST_LOCATION);
+                    satsViewModel.setLocation();
+                }// else getlocation();
+
             openCamera();
             sensorManager.registerListener((SensorEventListener) this, magnite, SensorManager.SENSOR_DELAY_UI);
             sensorManager.registerListener((SensorEventListener) this, gsensor, SensorManager.SENSOR_DELAY_UI);
@@ -174,11 +182,15 @@ public class CameraFragment extends Fragment implements SensorEventListener {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == MY_REQUEST_LOCATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                satsViewModel.setLocation();
+            }
+        }
         if (requestCode == MY_REQUEST_CODE_FOR_CAMERA) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // startCameraActivity(); // запускаем активность с камерой (ну или фрагмент)
                 openCamera();
-
             } else {
                 Toast toast = Toast.makeText(getActivity().getApplicationContext(), "no permition camera", Toast.LENGTH_SHORT);
                 toast.show();
@@ -287,7 +299,7 @@ public class CameraFragment extends Fragment implements SensorEventListener {
                     dy = height/2 + dY(coner,orientation[2]);
                     imageLineGor.setY(dy);
                     Animation animationGorRot = new RotateAnimation(xos, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,0.5f);
-                    animationGorRot.setDuration(4000);
+                    animationGorRot.setDuration(3000);
                     animationGorRot.setRepeatMode(Animation.REVERSE);
                     imageLineGor.startAnimation(animationGorRot);
                     //satelites.satelitteinfos.get

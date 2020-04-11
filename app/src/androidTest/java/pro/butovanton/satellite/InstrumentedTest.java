@@ -75,18 +75,19 @@ public class InstrumentedTest {
 
         for (Sat sat : sats) {
             Log.d("DEBUG", "position = " + sat.getPosition());
-            assertTrue(sat.getPosition() > 0);
+            assertNotNull(sat.getPosition());
+            assertFalse(sat.getPosition() > 360 );
+            assertFalse(sat.getPosition() < 360);
         }
    }
 
-     @Test
-     public void location_test() {
-         satsViewModel satsViewModel = new satsViewModel((Application) context.getApplicationContext());
-         Location location = satsViewModel.getLocation();
-         assertEquals(Location.class, location);
-     }
+    @Test
+    public void location_test() {
+        Location location = MLocation.getLocationWithCheckNetworkAndGPS(activityRule.getActivity());
+        assertTrue(location.getLongitude() > 0);
+        assertTrue(location.getLatitude() > 0);
 
-
+    }
 
 }
 

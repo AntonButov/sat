@@ -39,6 +39,7 @@ public class Sat {
                 while ((name.charAt(i + 1) != st.charAt(1) ) && (name.charAt(i + 1) != st.charAt(2)) && (name.charAt(i + 1) != st.charAt(3)));
                 break;
             }
+        if (name.charAt(i + 1) != st.charAt(3)) return "-" + result;
         return result;
     }
     public HashSet<String> getProviders() {
