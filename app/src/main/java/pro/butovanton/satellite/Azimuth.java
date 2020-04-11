@@ -36,4 +36,15 @@ import static java.lang.Math.toRadians;
         return (float) (180 + toDegrees(atan(tan(g2-g1)/sin(v))));
     }
 
+     public static String getdiametr(int coner) {
+         String diametr = "";
+         if (coner < 0) diametr = "-";
+         else if (coner < 10) diametr = "120";
+         else if (coner < 15) diametr = "100";
+         else if (coner < 20) diametr = "90";
+         else if (coner < 25) diametr = "80";
+         else if (coner < 90) diametr = "70";
+         return diametr;
+     }
+
 }

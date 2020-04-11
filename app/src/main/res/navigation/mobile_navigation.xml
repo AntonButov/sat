@@ -3,26 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_sats">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_sats"
         android:name="pro.butovanton.satellite.ui.sats.satsFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_sats" >
         <action
-            android:id="@+id/action_navigation_home_to_navigation_dashboard"
-            app:destination="@id/navigation_dashboard" />
+            android:id="@+id/action_navigation_sats_to_navigation_camera"
+            app:destination="@id/navigation_camera" />
+        <action
+            android:id="@+id/action_navigation_sats_to_notificationsFragment"
+            app:destination="@id/notificationsDetail" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_camera"
         android:name="pro.butovanton.satellite.ui.camera.CameraFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_camera" >
         <action
-            android:id="@+id/action_navigation_dashboard_to_navigation_home"
-            app:destination="@id/navigation_home" />
+            android:id="@+id/action_navigation_camera_to_navigation_sats"
+            app:destination="@id/navigation_sats" />
+    </fragment>
+    <fragment
+        android:id="@+id/notificationsDetail"
+        android:name="pro.butovanton.satellite.ui.notifications.DetailFragment"
+        android:label="fragment_notifications"
+        tools:layout="@layout/fragment_notifications" >
+        <action
+            android:id="@+id/action_Deatil_to_navigation_sats"
+            app:destination="@id/navigation_sats" />
     </fragment>
 
 </navigation>

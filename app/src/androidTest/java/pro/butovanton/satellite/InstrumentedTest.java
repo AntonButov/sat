@@ -77,7 +77,7 @@ public class InstrumentedTest {
             Log.d("DEBUG", "position = " + sat.getPosition());
             assertNotNull(sat.getPosition());
             assertFalse(sat.getPosition() > 360 );
-            assertFalse(sat.getPosition() < 360);
+            assertFalse(sat.getPosition() < -360);
         }
    }
 
