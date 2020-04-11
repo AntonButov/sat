@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/notificationsDetail"
-        android:name="pro.butovanton.satellite.ui.notifications.DetailFragment"
+        android:name="pro.butovanton.satellite.ui.detail.NotificationsFragment"
         android:label="fragment_notifications"
         tools:layout="@layout/fragment_notifications" >
         <action

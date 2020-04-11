@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -16,10 +17,10 @@ import pro.butovanton.satellite.Sat;
 class sRecyclerAdapter extends RecyclerView.Adapter<sRecyclerAdapter.sViewHolder> {
     private final LayoutInflater mInflater;
     private List<Sat> sats;
-    private Context context;
+    private satsFragment fragment;
 
-    public sRecyclerAdapter(Context context, List<Sat> sats) {
-        this.context = context;
+    public sRecyclerAdapter(Context context, List<Sat> sats, satsFragment fragment) {
+        this.fragment = fragment;
         mInflater = LayoutInflater.from(context);
         this.sats = sats;
     }
@@ -28,17 +29,23 @@ class sRecyclerAdapter extends RecyclerView.Adapter<sRecyclerAdapter.sViewHolder
     @Override
     public sViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item, parent, false);
-
-        return new sViewHolder(view);
+         return new sViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(sViewHolder holder, int position) {
+    public void onBindViewHolder(sViewHolder holder, final int position) {
         holder.setName(sats.get(position).getName());
         String providers = sats.get(position).getProviders().toString();
         providers = providers.replace("[", "");
         providers = providers.replace("]", "");
         holder.setProvidersT(providers);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment.onItemClick(sats.get(position));
+            }
+        });
     }
 
     @Override
@@ -52,7 +59,7 @@ class sRecyclerAdapter extends RecyclerView.Adapter<sRecyclerAdapter.sViewHolder
     }
 
 
-    public class sViewHolder extends RecyclerView.ViewHolder {
+    public class sViewHolder extends RecyclerView.ViewHolder  {
         private final TextView nameT, providersT;
 
         public sViewHolder(View view) {
@@ -67,6 +74,7 @@ class sRecyclerAdapter extends RecyclerView.Adapter<sRecyclerAdapter.sViewHolder
 
         public void setProvidersT(String providers) { providersT.setText( providers);}
 
-     }
+
+    }
 
 }

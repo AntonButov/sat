@@ -1,4 +1,4 @@
-package pro.butovanton.satellite.ui.notifications;
+package pro.butovanton.satellite.ui.detail;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
