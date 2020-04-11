@@ -152,8 +152,10 @@ public class CameraFragment extends Fragment implements SensorEventListener {
      //   for (Sat sat : sats) {
             float azimutplacesat = Azimuth.azimuthsat((float) location.getLongitude(), (float) location.getLatitude(), sat.getPosition());
             float conerplacesat = Azimuth.conerplacesat((float) location.getLongitude(), (float) location.getLatitude(), sat.getPosition());
-            String name = Integer.toString(sat.getPosition()) + "°";
-            if (conerplacesat > 0 && !positions.contains(sat.getPosition()) && sat.getPosition()%3 == 0) {
+            String name = Integer.toString(abs(sat.getPosition()));
+            if (sat.getPosition() > 0) name = name + "E°";
+                                  else name = name + "W°";      ////////////////ВРЕМЕННО КОГДА БУДУТ ЧЕКБОКСЫ НУЖНО УБРАТЬ
+            if (conerplacesat > 0 && !positions.contains(sat.getPosition()) && sat.getPosition()%2 == 0) {
                 positions.add(sat.getPosition());
                 viewsats.add(new viewsat(getContext(), constraintLayout, azimutplacesat, conerplacesat, name));
             }

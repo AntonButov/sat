@@ -20,7 +20,7 @@ public class viewsat {
 
         imageSat = new ImageView(context);
         imageSat.setImageResource(R.drawable.ic_filter_tilt_shift_black_24dp);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(50, 50);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(30, 30);
         imageSat.setLayoutParams(layoutParams);
         parrent.addView(imageSat);
         textView = new TextView(context);
