@@ -2,8 +2,12 @@ package pro.butovanton.satellite;
 
 import android.app.Application;
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.NavHost;
 import androidx.navigation.Navigation;
@@ -22,6 +26,7 @@ import java.io.IOException;
 import java.util.List;
 
 import pro.butovanton.satellite.ui.sats.satsFragment;
+import pro.butovanton.satellite.ui.sats.satsViewModel;
 
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -60,6 +65,7 @@ public class InstrumentedTest {
     assertTrue(sats.size() > 0);
     for( Sat sat : sats)
         assertTrue(sat.getName() != null);
+
     }
 
     @Test
@@ -74,9 +80,10 @@ public class InstrumentedTest {
    }
 
      @Test
-     public void camera_test() {
-     //    final NavController navController;
-    //     navController = NavHostFragment.findNavController(activityRule.getActivity().getFragmentManager().getPrimaryNavigationFragment()).navigate(R.id.action_navigation_home_to_navigation_dashboard);
+     public void location_test() {
+         satsViewModel satsViewModel = new satsViewModel((Application) context.getApplicationContext());
+         Location location = satsViewModel.getLocation();
+         assertEquals(Location.class, location);
      }
 
 

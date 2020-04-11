@@ -182,7 +182,7 @@ public class CameraFragment extends Fragment implements SensorEventListener {
             } else {
                 Toast toast = Toast.makeText(getActivity().getApplicationContext(), "no permition camera", Toast.LENGTH_SHORT);
                 toast.show();
-                NavHostFragment.findNavController(this).navigate(R.id.action_navigation_camera_to_navigation_sats);
+                NavHostFragment.findNavController(this).navigate(R.id.action_navigation_home_to_navigation_dashboard);
             }
         }
     }
