@@ -3,6 +3,7 @@ package pro.butovanton.satellite;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraDevice;
@@ -55,7 +56,9 @@ import java.util.Arrays;
                 try {
                     final CaptureRequest.Builder builder =
                             mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+
                     builder.addTarget(surface);
+
                     mCameraDevice.createCaptureSession(Arrays.asList(surface),
                             new CameraCaptureSession.StateCallback() {
                                 @Override

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.graphics.SurfaceTexture;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -157,35 +158,21 @@ public class CameraFragment extends Fragment implements SensorEventListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_REQUEST_CODE_FOR_CAMERA);
-            }
-                if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_REQUEST_LOCATION);
-                    satsViewModel.setLocation();
-                }// else getlocation();
-
+            } else
+              if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                  requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_REQUEST_LOCATION);
+                  }
+                  else {
+                 satsViewModel.setLocation();
+                               openCamera();
+                 }
+        }
+        else {
             openCamera();
-            sensorManager.registerListener((SensorEventListener) this, magnite, SensorManager.SENSOR_DELAY_UI);
-            sensorManager.registerListener((SensorEventListener) this, gsensor, SensorManager.SENSOR_DELAY_UI);
+            satsViewModel.setLocation();
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == MY_REQUEST_LOCATION) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                satsViewModel.setLocation();
-            }
-        }
-        if (requestCode == MY_REQUEST_CODE_FOR_CAMERA) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // startCameraActivity(); // запускаем активность с камерой (ну или фрагмент)
-                openCamera();
-            } else {
-                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "no permition camera", Toast.LENGTH_SHORT);
-                toast.show();
-                NavHostFragment.findNavController(this).navigate(R.id.action_navigation_sats_to_navigation_camera);
-            }
-        }
+        sensorManager.registerListener((SensorEventListener) this, magnite, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener((SensorEventListener) this, gsensor, SensorManager.SENSOR_DELAY_UI);
     }
 
     private void openCamera() {
@@ -204,13 +191,9 @@ public class CameraFragment extends Fragment implements SensorEventListener {
                         * event.values[1];
                 mGravity[2] = alphagravity * mGravity[2] + (1 - alphagravity)
                         * event.values[2];
-                // mGravity = event.values;
-
-                // Log.e(TAG, Float.toString(mGravity[0]));
             }
 
             if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-                // mGeomagnetic = event.values;
 
                 mGeomagnetic[0] = alphageomagnetic * mGeomagnetic[0] + (1 - alphageomagnetic)
                         * event.values[0];
@@ -218,8 +201,6 @@ public class CameraFragment extends Fragment implements SensorEventListener {
                         * event.values[1];
                 mGeomagnetic[2] = alphageomagnetic * mGeomagnetic[2] + (1 - alphageomagnetic)
                         * event.values[2];
-                // Log.e(TAG, Float.toString(event.values[0]));
-
             }
 
             boolean success = SensorManager.getRotationMatrix(r, I, mGravity, mGeomagnetic);
@@ -234,7 +215,6 @@ public class CameraFragment extends Fragment implements SensorEventListener {
                     azimuth = (float) (azimuth + 2*PI);
                 }
 
-                // conerplace = (90+(int)Math.toDegrees(orientation[1]))%360; // orientation
                 xorR = orientation[2];
                 xos = (int) Math.toDegrees(orientation[2]); // orientation
                 //xos = (xos);
