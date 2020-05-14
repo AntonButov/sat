@@ -271,16 +271,10 @@ public class CameraFragment extends Fragment implements SensorEventListener {
                     animationGorRot.setDuration(3000);
                     animationGorRot.setRepeatMode(Animation.REVERSE);
                     imageLineGor.startAnimation(animationGorRot);
-                    //satelites.satelitteinfos.get
                     float dxx = x1 - width/2;
                     float dyy = y1 - height;
                     float dalpha = (float) toDegrees(atan(dyy/dxx));
                     if (x1 - width/2 < 0) dalpha = dalpha - 180;
-           //         Animation animatArrow = new RotateAnimation(dalpha, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,0.5f);
-            //        animatArrow.setDuration(5000);
-//                    left.startAnimation(animatArrow);
-
-                  //    Log.d("DEBUG", "azimut="+(int)azimuthcon+" xos= "+(int)xos+" coner= "+(int)conerplace);
                 }
                 ///------------------------------------------------------------------------------------
             }
